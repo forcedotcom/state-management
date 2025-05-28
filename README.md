@@ -1,10 +1,10 @@
 # README
 
-A repo containing all the basic file templates and general guidelines for any open source project at Salesforce.
+This repo contains:
 
-## Usage
-
-It's required that all files must be placed at the top level of your repository.
-
-> **NOTE** Your README should contain detailed, useful information about the project!
-
+- Examples that use the state manager library from `@lwc/state`. Each example
+  has a README.md that provides further details & instructions on how to use
+  the example code.
+  - TODO: list the examples here, with links
+- Issues and related discussions from the dev preview of the Salesforce
+  state manager feature.
