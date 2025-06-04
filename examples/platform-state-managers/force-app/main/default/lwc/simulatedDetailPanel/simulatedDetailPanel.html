@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="Simulated detail panel">
+        <section class="slds-p-around_small">
+            <lightning-input type="text" label="Object API name" lwc:ref="objectApiName"></lightning-input>
+            <lightning-input type="text" label="Record ID" lwc:ref="recordId"></lightning-input>
+
+            <br/>
+
+            <lightning-button label="Set" onclick={setConfig}></lightning-button>
+
+            <hr/>
+
+            <textarea rows="20" cols="80">{stateDump}</textarea>
+        </section>
+    </lightning-card>
+</template>

@@ -1,0 +1,28 @@
+:host {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+}
+
+.icon {
+    height: 48px;
+    width: 48px;
+    fill: #FFFFFF;
+    margin-right: 1rem;
+}
+
+.labels {
+    display: flex;
+    flex-direction: column;
+    min-width: 5rem;
+}
+
+.labels p {
+    margin: 0.25rem;
+    padding: 0;
+    font-size: 1.25rem;
+}
