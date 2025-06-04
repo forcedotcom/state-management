@@ -1,7 +1,6 @@
-import { defineState } from '@lwc/state';
-// TODO - change these to lightning/*
-import smRecord from 'force/stateManagerRecord';
-import smLayout from 'force/stateManagerLayout';
+import { defineState } from 'lightning/lwcState';
+import smRecord from 'lightning/stateManagerRecord';
+import smLayout from 'lightning/stateManagerLayout';
 
 /**
  * Extracts the field values referenced by a layout.
