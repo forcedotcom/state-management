@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "nodeNext",
+    "moduleResolution": "nodeNext",
+    "esModuleInterop": false,
+    "target": "es2020",
+    "sourceMap": true,
+    "outDir": "dist",
+    "noImplicitThis": true,
+  },
+  "lib": ["es2020"]
+}

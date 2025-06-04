@@ -1,0 +1,42 @@
+:host {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.product {
+    display: flex;
+    justify-content: center;
+}
+
+div.image {
+    padding: 2rem;
+}
+
+svg {
+    height: 128px;
+    width: 128px;
+}
+
+div.info {
+    padding: 2rem;
+}
+
+div.price {
+    font-size: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+select {
+    font-size: 1rem;
+}
+
+button {
+    font-size: 1rem;
+    background-color: #097fb3;
+    border: 1px solid rgba(0, 0, 0, 0);
+    padding: .5rem .75rem;
+    color: #FFFFFF;
+}
+button:hover {
+    background-color: #07658f;
+}

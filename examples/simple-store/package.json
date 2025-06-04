@@ -1,0 +1,35 @@
+{
+    "private": true,
+    "name": "@lwc/state-playground",
+    "version": "8.13.1",
+    "type": "module",
+    "description": "Playground project to experiment with LWC state.",
+    "scripts": {
+        "dev": "rollup -c --watch",
+        "build": "NODE_ENV=production rollup -c"
+    },
+    "devDependencies": {
+        "@lwc/rollup-plugin": "8.13.1",
+        "@lwc/signals": "^8.13.1",
+        "@lwc/state": "^0.13.0",
+        "@rollup/plugin-commonjs": "^25.0.7",
+        "@rollup/plugin-node-resolve": "^15.2.3",
+        "@rollup/plugin-replace": "^5.0.5",
+        "@rollup/plugin-typescript": "^11.1.6",
+        "lwc": "8.13.1",
+        "rollup": "^4.19.0",
+        "rollup-plugin-livereload": "^2.0.5",
+        "rollup-plugin-serve": "^3.0.0",
+        "tslib": "^2.6.2",
+        "typescript": "^5.3.3"
+    },
+    "nx": {
+        "targets": {
+            "build": {
+                "outputs": [
+                    "{projectRoot}/dist"
+                ]
+            }
+        }
+    }
+}

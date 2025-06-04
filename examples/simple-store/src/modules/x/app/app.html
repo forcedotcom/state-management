@@ -1,0 +1,29 @@
+<template>
+    <!-- State managers can be shared between components in different ways. -->
+
+    <!-- Components can find the state manager from their context. This
+         is useful in cases like this where the cart component that needs
+         the state manager is not an immediate child. -->
+    <x-header></x-header>
+
+    <!-- The entire state manager can be passed as a property. -->
+    <x-details shop-state={shopState}></x-details>
+
+    <!-- Component properties can individually bound to state manager
+         properties.-->
+    <x-footer
+      sale-item={shopState.value.currentSale.item}
+      sale-color={shopState.value.currentSale.color}
+      sale-discount={shopState.value.currentSale.discount}>
+    </x-footer>
+
+    <section class="demo-tools">
+        <h2>Demo tools</h2>
+        <div class="controls">
+            <!-- state managers actions can be referenced directly in your template -->
+            <button onclick={shopState.value.emptyCart}>Empty cart</button>&nbsp;
+            <button onclick={selectGreenBoots}>Select green boots</button>&nbsp;
+            <button onclick={putCurrentItemOnSale}>Sale on current item</button>&nbsp;
+        </div>
+    </section>
+</template>
