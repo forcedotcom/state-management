@@ -1,7 +1,6 @@
-import { defineState } from '@lwc/state';
-// TODO - change these to lightning/*
-import smRecord from 'force/stateManagerRecord';
-import smLayout from 'force/stateManagerLayout';
+import { defineState } from 'lightning/lwcState';
+import smRecord from 'lightning/stateManagerRecord';
+import smLayout from 'lightning/stateManagerLayout';
 
 /**
  * Extracts the field values referenced by a layout.
@@ -63,10 +62,10 @@ export default defineState(({ atom, computed, setAtom }) => {
         // initialRecord is a nested state manager that we use to retrieve the minimal copy
         // of the record (step 1 above). We use computed() here so that the configuration
         // for smRecord will automatically be updated anytime the config changes.
-        const initialRecord = smRecord(computed([ config ], () => {
+        const initialRecord = smRecord(computed([ config ], ({ recordId, objectApiName } = {}) => {
             // If the state manager does not yet have a recordId or objectApiName then
             // pass an empty config to smRecord; the empty config will cause smRecord to wait.
-            if (! config.value.recordId || ! config.value.objectApiName) {
+            if (! recordId || ! objectApiName) {
                 return {};
             }
 
@@ -74,26 +73,26 @@ export default defineState(({ atom, computed, setAtom }) => {
             // for the Id field here because we are required to specify something. The data
             // we really want (the recordTypeId) is included by default.
             return {
-                recordId: config.value.recordId,
-                fields: [ `${config.value.objectApiName}.Id` ],
+                recordId,
+                fields: [ `${objectApiName}.Id` ],
             };
         }));
 
         // layout is another nested state manager that we use to retrieve the layout. Its inputs
         // are derived from the output of initialRecord, so we use computed() to update
         // the config every time initialRecord changes.
-        const layout = smLayout(computed([ initialRecord ], () => {
+        const layout = smLayout(computed([ initialRecord ], ({ data: recordData }) => {
             // If initialRecord has not retrieved the record yet then return an empty config
             // so smLayout will wait.
-            if (! initialRecord.value.data) {
+            if (! recordData) {
                 return {};
             }
 
             // Once initialRecord has data available, use its apiName & recordTypeId to ask
             // for the Compact View layout.
             return {
-                objectApiName: initialRecord.value.data.apiName,
-                recordTypeId: initialRecord.value.data.recordTypeId,
+                objectApiName: recordData.apiName,
+                recordTypeId: recordData.recordTypeId,
                 layoutType: 'Compact',
                 mode: 'View',
             }
@@ -102,30 +101,33 @@ export default defineState(({ atom, computed, setAtom }) => {
         // finalRecord is used to retrieve the full set of field values that the layout needs.
         // We use computed() here so that the config this second smRecord will be re-evaluated
         // whenever initialRecord or layout changes.
-        const finalRecord = smRecord(computed([ initialRecord, layout ], () => {
-            // As above, tell smRecord to wait if we don't have the necessary information
-            // yet.
-            if (! initialRecord.value.data || ! layout.value.data) {
-                return {};
-            }
+        const finalRecord = smRecord(computed(
+            [ initialRecord, layout ],
+            ({ data: recordData }, { data: layoutData }) => {
+                // As above, tell smRecord to wait if we don't have the necessary information
+                // yet.
+                if (! recordData || ! layoutData) {
+                    return {};
+                }
 
-            // Once we have all the information, ask for all the layout's fields for the
-            // record.
-            return {
-                recordId: initialRecord.value.data.id,
-                fields: extractFields(layout.value.data),
+                // Once we have all the information, ask for all the layout's fields for the
+                // record.
+                return {
+                    recordId: recordData.id,
+                    fields: extractFields(layoutData),
+                }
             }
-        }));
+        ));
 
         // data is a just a more consumable form of the field values in finalRecord. As such,
         // we want to update it every time finalRecord changes.
-        const data = computed([ finalRecord ], () => {
-            if (! finalRecord.value.data) {
+        const data = computed([ finalRecord ], ({ data: recordData }) => {
+            if (! recordData) {
                 return;
             }
 
             const fieldValues = {};
-            for (const [ field, value ] of Object.entries(finalRecord.value.data.fields)) {
+            for (const [ field, value ] of Object.entries(recordData.fields)) {
                 fieldValues[field] = value.displayValue || value.value;
             }
 
@@ -133,37 +135,40 @@ export default defineState(({ atom, computed, setAtom }) => {
         });
 
         // error is simply an aggregation of errors from initialRecord, layout, and finalRecord.
-        const error = computed([ initialRecord, layout, finalRecord ], () => {
-            return initialRecord.value.error ||
-                layout.value.error ||
-                finalRecord.value.error;
-        });
+        const error = computed(
+            [ initialRecord, layout, finalRecord ],
+            ({ error: initialRecordError }, { error: layoutError }, { error: finalRecordError }) =>
+                initialRecordError || layoutError || finalRecordError,
+        );
 
         // status is used to let consumers of this state manager understand what's going on
-        const status = computed([ initialRecord, layout, finalRecord ], () => {
-            // We configure initialRecord as soon as this state manager is configured, so we
-            // can assume its "unconfigured" status means that this state manager is also
-            // unconfigured.
-            if (initialRecord.value.status === 'unconfigured') {
-                return 'unconfigured';
+        const status = computed(
+            [ initialRecord, layout, finalRecord ],
+            ({ status: initialRecordStatus }, { status: layoutStatus }, { status: finalRecordStatus }) => {
+                // We configure initialRecord as soon as this state manager is configured, so we
+                // can assume its "unconfigured" status means that this state manager is also
+                // unconfigured.
+                if (initialRecordStatus === 'unconfigured') {
+                    return 'unconfigured';
+                }
+                // any errors => error
+                else if (initialRecordStatus === 'error' ||
+                    layoutStatus === 'error' ||
+                    finalRecordStatus === 'error') {
+                    return 'error';
+                }
+                // everything loaded => loaded
+                else if (initialRecordStatus === 'loaded' &&
+                    layoutStatus === 'loaded' &&
+                    finalRecordStatus === 'loaded') {
+                    return 'loaded';
+                }
+                // other status combinations mean something is still loading
+                else {
+                    return 'loading';
+                }
             }
-            // any errors => error
-            else if (initialRecord.value.status === 'error' ||
-                layout.value.status === 'error' ||
-                finalRecord.value.status === 'error') {
-                return 'error';
-            }
-            // everything loaded => loaded
-            else if (initialRecord.value.status === 'loaded' &&
-                layout.value.status === 'loaded' &&
-                finalRecord.value.status === 'loaded') {
-                return 'loaded';
-            }
-            // other status combinations mean something is still loading
-            else {
-                return 'loading';
-            }
-        });
+        );
 
         // This is the external shape that consumers of this state manager will see.
         return {

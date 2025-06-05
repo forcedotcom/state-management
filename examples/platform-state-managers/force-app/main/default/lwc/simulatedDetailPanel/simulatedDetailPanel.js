@@ -1,7 +1,5 @@
 import { LightningElement } from 'lwc';
-import detailPanelStateManager from 'force/detailPanelStateManager';
-// TODO
-// import detailPanelStateManager from 'c/detailPanelStateManager';
+import detailPanelStateManager from 'c/detailPanelStateManager';
 
 export default class simulatedDetailPanel extends LightningElement {
     state = detailPanelStateManager();
