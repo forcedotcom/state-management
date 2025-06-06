@@ -1,24 +1,38 @@
-# LWC State Manager demo
+# Simple Store: An LWC State Manager Example
 
-This is a very simple storefront application that illustrates some of
-the functions of LWC state managers.
-The application consists of a handful of components
-that display and alter information in a single shared state manager.
-None of the components communicate using properties or events -
-all information is shared through the state manager.
+This is a simple online store application that illustrates some of
+the functions of LWC state managers. None of the components connect to 
+or depend on Salesforce services or APIs. You can run this example entirely 
+stand-alone.
 
-The interesting source for the application can be found in `src/modules/x`:
+The application consists of a handful of components that display and 
+alter information in a single shared state manager.
 
-- `app` is the top-level application component
+None of the components communicate using properties or events --
+all information is managed through the state manager.
+
+The interesting source for the application is in `src/modules/x`:
+
+## Logic Components
+
+These components have no user interface. 
+
+- `app` is the top-level application component; its purpose is to define and launch the example
+- `shopState` is the state manager that holds and changes all state for the application
+
+## User Interface Components
 - `header` is the site's header
-- `cart` is the shopping cart icon & associated text
-- `details` is the product picker & display
+- `cart` is the shopping cart icon and associated text
+- `details` is the product picker and display
 - `footer` is the site's footer
-- `shopState` is the state manager that stores all the state for the application
 
-This application is available in a [StackBlitz playground](https://stackblitz.com/github/mburr-salesforce/tdx-state-manager-demo) if you'd like to explore how it works without cloning & setting up the repo.
+## Running Simple Store
 
-## Local setup
+This application is available in a 
+[StackBlitz playground](https://stackblitz.com/github/mburr-salesforce/tdx-state-manager-demo) 
+if you'd like to explore how it works without cloning the repo and setting up the app yourself.
+
+### Local Setup
 
 After cloning the repo:
 
