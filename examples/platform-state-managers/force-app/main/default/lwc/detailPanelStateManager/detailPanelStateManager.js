@@ -1,4 +1,4 @@
-import { defineState } from 'lightning/lwcState';
+import { defineState } from '@lwc/state';
 import smRecord from 'lightning/stateManagerRecord';
 import smLayout from 'lightning/stateManagerLayout';
 

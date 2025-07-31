@@ -1,7 +1,7 @@
-import { ContextfulLightningElement } from '@lwc/state'
+import { LightningElement } from 'lwc'
 import createShopStateManager from 'x/shopState'
 
-export default class App extends ContextfulLightningElement {
+export default class App extends LightningElement {
     shopState = createShopStateManager()
 
     constructor() {

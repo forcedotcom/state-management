@@ -29,7 +29,7 @@ These components have no user interface.
 ## Running Simple Store
 
 This application is available in a 
-[StackBlitz playground](https://stackblitz.com/github/mburr-salesforce/tdx-state-manager-demo) 
+[StackBlitz playground](https://stackblitz.com/github/forcedotcom/state-management/tree/main/examples/simple-store) 
 if you'd like to explore how it works without cloning the repo and setting up the app yourself.
 
 ### Local Setup
