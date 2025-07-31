@@ -27,8 +27,10 @@ These components have no user interface.
 - `footer` is the site's footer
 
 ## Running Simple Store
-If you'd like to explore how this application works without cloning the repo and setting it up yourself you can
-[![open it in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/forcedotcom/state-management/tree/main/examples/simple-store).
+
+This application is available in a 
+[StackBlitz playground](https://stackblitz.com/github/forcedotcom/state-management/tree/main/examples/simple-store) 
+if you'd like to explore how it works without cloning the repo and setting up the app yourself.
 
 ### Local Setup
 
