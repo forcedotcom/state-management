@@ -52,8 +52,7 @@ const sale = (item_?: string, color_?: string, discount_?: number): Sale => {
 
 // Creator function for the state manager for the shop. Each invocation of this function
 // creates a new set of state information.
-export const createShopStateManager = defineState(({ atom, computed, setAtom }) => () => {
-    atom
+export const createShopStateManager = defineState(({ atom, computed, setAtom }) => {
     // item currently selected
     const currentItem = atom<Item>({
         item: items[0],

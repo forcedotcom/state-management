@@ -11,7 +11,7 @@
     "devDependencies": {
         "@lwc/rollup-plugin": "^8.19.2",
         "@lwc/signals": "^8.19.2",
-        "@lwc/state": "^0.16.0",
+        "@lwc/state": "^0.27.0",
         "@rollup/plugin-commonjs": "^25.0.7",
         "@rollup/plugin-node-resolve": "^15.2.3",
         "@rollup/plugin-replace": "^5.0.5",
