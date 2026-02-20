@@ -62,6 +62,9 @@ describe('detailPanelStateManager', () => {
 
         it.each([
             // initialRecordId, initialObjectApiName, newRecordId, expectedInitialRecordConfig
+            // Note that expectedInitialRecordConfig is the expected current config for the initialRecord
+            // state manager, which may or may not match the config supplied when that state manager was
+            // created.
             [ undefined, undefined, undefined, {} ],
             [ undefined, undefined, recordId, {} ],
             [ undefined, objectApiName, undefined, {} ],
@@ -84,6 +87,9 @@ describe('detailPanelStateManager', () => {
 
         it.each([
             // initialRecordId, initialObjectApiName, newObjectApiName, expectedInitialRecordConfig
+            // Note that expectedInitialRecordConfig is the expected current config for the initialRecord
+            // state manager, which may or may not match the config supplied when that state manager was
+            // created.
             [ undefined, undefined, undefined, {} ],
             [ undefined, undefined, objectApiName, {} ],
             [ undefined, objectApiName, undefined, {} ],
@@ -270,12 +276,16 @@ describe('detailPanelStateManager', () => {
         describe('status', () => {
             it.each([
                 // initialRecord status, layout status, finalRecord status, expected status
-                [ 'unconfigured', 'dont-care', 'dont-care', 'unconfigured' ],
-                [ 'error', 'dont-care', 'dont-care', 'error' ],
-                [ 'dont-care', 'error', 'dont-care', 'error' ],
-                [ 'dont-care', 'dont-care', 'error', 'error' ],
+                // The '*'s represent "don't care" values. In those cases the expected status is
+                // determined by other values.
+                [ 'unconfigured', '*', '*', 'unconfigured' ],
+                [ 'error', '*', '*', 'error' ],
+                [ '*', 'error', '*', 'error' ],
+                [ '*', '*', 'error', 'error' ],
                 [ 'loaded', 'loaded', 'loaded', 'loaded' ],
-                [ 'dont-care', 'dont-care', 'dont-care', 'loading' ],
+                // all remaining combinations should result in 'loading' status, but listing them
+                // explicitly would be quite verbose
+                [ '*', '*', '*', 'loading' ],
             ])('aggregates status from nested state managers: (%s, %s, %s)', async (initialRecordStatus, layoutStatus, finalRecordStatus, expected) => {
                 const stateManager = createDetailPanelStateManager(recordId, objectApiName);
 
