@@ -16,10 +16,12 @@ describe('detailPanelStateManager', () => {
         jest.clearAllMocks();
     });
 
-    // Extract the nested state managers and the config objects that were passed to them.
-    // Note that the configs are all computed()s so while the refences will remain constant,
-    // we'll use .value to get the current values in the tests.
-    function extractNestedStateManagers() {
+    // Creates a detailPanelStateManager and extracts the configs and nested state managers
+    // from it. Note that the configs are all computed()s so while the refences will remain
+    // constant, we'll use .value to get the current values in the tests.
+    function createDetailPanelStateManager(...params) {
+        const stateManager = detailPanelStateManager(...params);
+
         initialRecordConfig = smRecord.mock.calls[0]?.[0];
         initialRecord = smRecord.mock.results[0].value;
 
@@ -28,11 +30,12 @@ describe('detailPanelStateManager', () => {
 
         finalRecordConfig = smRecord.mock.calls[1]?.[0];
         finalRecord = smRecord.mock.results[1].value;
+
+        return stateManager;
     }
 
     it('initializes with default values', () => {
-        const stateManager = detailPanelStateManager();
-        extractNestedStateManagers();
+        const stateManager = createDetailPanelStateManager();
 
         // configs for nested state managers should be empty since we didn't provide recordId or objectApiName
         expect(initialRecordConfig.value).toEqual({});
@@ -52,9 +55,8 @@ describe('detailPanelStateManager', () => {
             [ undefined, objectApiName, {} ],
             [ recordId, objectApiName, { recordId, fields: [ `${objectApiName}.Id` ] } ],
         ])('sets initialRecord config: detailPanelStateManager(%s, %s)', (initialRecordId, initialObjectApiName, expectedInitialRecordConfig) => {
-            const stateManager = detailPanelStateManager(initialRecordId, initialObjectApiName);
-            extractNestedStateManagers();
-
+            const stateManager = createDetailPanelStateManager(initialRecordId, initialObjectApiName);
+            
             expect(initialRecordConfig.value).toEqual(expectedInitialRecordConfig);
         });
 
@@ -71,8 +73,7 @@ describe('detailPanelStateManager', () => {
             [ recordId, objectApiName, '001xx0000000001AAA', { recordId: '001xx0000000001AAA', fields: [ `${objectApiName}.Id` ] } ],
         ])('updates initialRecord config: detailPanelStateManager(%s, %s), setRecordId(%s)', (initialRecordId, initialObjectApiName, newRecordId, expectedInitialRecordConfig) => {
             // create state manager with initial values
-            const stateManager = detailPanelStateManager(initialRecordId, initialObjectApiName);
-            extractNestedStateManagers();
+            const stateManager = createDetailPanelStateManager(initialRecordId, initialObjectApiName);
 
             // update the recordId
             stateManager.value.setRecordId(newRecordId);
@@ -94,8 +95,7 @@ describe('detailPanelStateManager', () => {
             [ recordId, objectApiName, 'Contact', { recordId, fields: [ 'Contact.Id' ] } ],
         ])('updates initialRecord config: detailPanelStateManager(%s, %s), setObjectApiName(%s)', (initialRecordId, initialObjectApiName, newObjectApiName, expectedInitialRecordConfig) => {
             // create state manager with initial values
-            const stateManager = detailPanelStateManager(initialRecordId, initialObjectApiName);
-            extractNestedStateManagers();
+            const stateManager = createDetailPanelStateManager(initialRecordId, initialObjectApiName);
 
             // update the objectApiName
             stateManager.value.setObjectApiName(newObjectApiName);
@@ -107,8 +107,7 @@ describe('detailPanelStateManager', () => {
 
     describe('layout config', () => {
         it('sets layout config when initialRecord data is available', async () => {
-            const stateManager = detailPanelStateManager(recordId, objectApiName);
-            extractNestedStateManagers();
+            const stateManager = createDetailPanelStateManager(recordId, objectApiName);
 
             // layout config not set yet
             expect(layoutConfig.value).toEqual({});
@@ -131,8 +130,7 @@ describe('detailPanelStateManager', () => {
         });
 
         it('resets layout config when initialRecord data becomes unavailable', async () => {
-            const stateManager = detailPanelStateManager(recordId, objectApiName);
-            extractNestedStateManagers();
+            const stateManager = createDetailPanelStateManager(recordId, objectApiName);
 
             // initialRecord loaded
             await initialRecord.updateValue({
@@ -165,8 +163,7 @@ describe('detailPanelStateManager', () => {
 
     describe('finalRecord config', () => {
         it('sets finalRecord config when initialRecord and layout data are available', async () => {
-            const stateManager = detailPanelStateManager(recordId, objectApiName);
-            extractNestedStateManagers();
+            const stateManager = createDetailPanelStateManager(recordId, objectApiName);
 
             // finalRecord config not set yet
             expect(finalRecordConfig.value).toEqual({});
@@ -217,8 +214,7 @@ describe('detailPanelStateManager', () => {
 
         describe('data', () => {
             it('includes field data from finalRecord, preferring displayValue over value', async () => {
-                const stateManager = detailPanelStateManager(recordId, objectApiName);
-                extractNestedStateManagers();
+                const stateManager = createDetailPanelStateManager(recordId, objectApiName);
 
                 // finalRecord loaded
                 await finalRecord.updateValue({
@@ -249,8 +245,7 @@ describe('detailPanelStateManager', () => {
                 [ undefined, undefined, 'finalRecord error', 'finalRecord error' ],
                 [ undefined, undefined, undefined, undefined ],
             ])('aggregates errors from nested state managers: (%s, %s, %s)', async (initialRecordError, layoutError, finalRecordError, expected) => {
-                const stateManager = detailPanelStateManager(recordId, objectApiName);
-                extractNestedStateManagers();
+                const stateManager = createDetailPanelStateManager(recordId, objectApiName);
 
                 await Promise.all([
                     // set nested state managers errors
@@ -282,8 +277,7 @@ describe('detailPanelStateManager', () => {
                 [ 'loaded', 'loaded', 'loaded', 'loaded' ],
                 [ 'dont-care', 'dont-care', 'dont-care', 'loading' ],
             ])('aggregates status from nested state managers: (%s, %s, %s)', async (initialRecordStatus, layoutStatus, finalRecordStatus, expected) => {
-                const stateManager = detailPanelStateManager(recordId, objectApiName);
-                extractNestedStateManagers();
+                const stateManager = createDetailPanelStateManager(recordId, objectApiName);
 
                 await Promise.all([
                     // set nested state manager status values
@@ -307,8 +301,7 @@ describe('detailPanelStateManager', () => {
     });
 
     it('works end-to-end', async () => {
-        const stateManager = detailPanelStateManager();
-        extractNestedStateManagers();
+        const stateManager = createDetailPanelStateManager(recordId, objectApiName);
 
         // initial state
         expect(stateManager.value.status).toBe('unconfigured');
