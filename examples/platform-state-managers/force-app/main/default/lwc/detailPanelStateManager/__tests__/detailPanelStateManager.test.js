@@ -47,20 +47,14 @@ describe('detailPanelStateManager', () => {
 
     describe('initialRecord config', () => {
         it.each([
-            // initialRecordId, initialObjectApiName
-            [ recordId, undefined ],
-            [ undefined, objectApiName ],
-            [ recordId, objectApiName ],
-        ])('sets initialRecord config: detailPanelStateManager(%s, %s)', (initialRecordId, initialObjectApiName) => {
+            // initialRecordId, initialObjectApiName, expectedInitialRecordConfig
+            [ recordId, undefined, {} ],
+            [ undefined, objectApiName, {} ],
+            [ recordId, objectApiName, { recordId, fields: [ `${objectApiName}.Id` ] } ],
+        ])('sets initialRecord config: detailPanelStateManager(%s, %s)', (initialRecordId, initialObjectApiName, expectedInitialRecordConfig) => {
             const stateManager = detailPanelStateManager(initialRecordId, initialObjectApiName);
             extractNestedStateManagers();
 
-            const expectedInitialRecordConfig = initialRecordId !== undefined && initialObjectApiName !== undefined
-                ? {
-                    recordId: initialRecordId,
-                    fields: [ `${initialObjectApiName}.Id` ],
-                }
-                : {};
             expect(initialRecordConfig.value).toEqual(expectedInitialRecordConfig);
         });
 
