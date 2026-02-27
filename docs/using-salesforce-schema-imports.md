@@ -14,14 +14,12 @@ State Managers work with the existing @salesforce/schema import mechanism for Ob
 ```
 import { defineState } from '@lwc/state';
 import smRecord from 'lightning/stateManagerRecord';
-import ACCOUNT from "@salesforce/schema/Account";
 import NAME_FIELD from "@salesforce/schema/Account.Name";
-import CUSTOM_OBJECT from "@salesforce/schema/CustomObject__c"
 import CUSTOM_FIELD from "@salesforce/schema/CustomObject__c.CustomField__c";
 
 const recordSM = defineState(() => {
-            const accountRecord = smRecord({recordId: '001xx000003GYiCAAW', optionalFields: [`${ACCOUNT.objectApiName}.${NAME_FIELD.fieldApiName}`]}, {}); // Account.Name
-            const customObjectRecord = smRecord({recordId: 'a00xx000000bnfRAAQ', optionalFields: [`${CUSTOM_OBJECT.objectApiName}.${CUSTOM_FIELD.fieldApiName}`]}, {}); // CustomObject__c.CustomField__c
+            const accountRecord = smRecord({recordId: '001xx000003GYiCAAW', optionalFields: [NAME_FIELD]}, {}); // Account.Name
+            const customObjectRecord = smRecord({recordId: 'a00xx000000bnfRAAQ', optionalFields: [CUSTOM_FIELD]}, {}); // CustomObject__c.CustomField__c
     return {
         accountRecord,
         customObjectRecord
