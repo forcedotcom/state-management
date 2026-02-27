@@ -19,7 +19,6 @@ import NAME_FIELD from "@salesforce/schema/Account.Name";
 import CUSTOM_OBJECT from "@salesforce/schema/CustomObject__c"
 import CUSTOM_FIELD from "@salesforce/schema/CustomObject__c.CustomField__c";
 
-
 const recordSM = defineState(() => {
             const accountRecord = smRecord({recordId: '001xx000003GYiCAAW', optionalFields: [`${ACCOUNT.objectApiName}.${NAME_FIELD.fieldApiName}`]}, {}); // Account.Name
             const customObjectRecord = smRecord({recordId: 'a00xx000000bnfRAAQ', optionalFields: [`${CUSTOM_OBJECT.objectApiName}.${CUSTOM_FIELD.fieldApiName}`]}, {}); // CustomObject__c.CustomField__c
